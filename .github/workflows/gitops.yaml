@@ -1,0 +1,35 @@
+name: GitOps Infrastructure Deployment
+ 
+on:
+  push:
+    branches:
+      - main
+ 
+permissions:
+  contents: read
+ 
+jobs:
+  terraform-deploy:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+ 
+    environment: production
+ 
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+ 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+ 
+      - name: Terraform Init
+        run: terraform init -input=false
+ 
+      - name: Terraform Validate
+        run: terraform validate
+ 
+      - name: Terraform Plan
+        run: terraform plan -input=false
+ 
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -input=false
